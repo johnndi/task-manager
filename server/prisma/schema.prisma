@@ -12,3 +12,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+model task {
+  id String @id @default(uuid())
+  Title String
+  Description String
+
+  @@map("tasks")
+}
