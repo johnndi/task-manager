@@ -1,10 +1,26 @@
 import useUserStores from "../../store/user.store.jsx";
-import { items } from "./items.js";
 import "./Home.css";
+import { useState, useEffect } from "react";
+import { useFormik } from "formik";
 
 const Home = () => {
-  const { users, addTask, completeTask, incompleteTask } = useUserStores();
-  console.log(users);
+  const { users, completeTask, incompleteTask } = useUserStores();
+  const [task, setTask] = useState([]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch("http://localhost:3005/task/");
+      const data = await response.json();
+      setTask(data.data);
+      console.log(data)
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
 
   const handleComplete = (id) => {
     completeTask(id);
@@ -14,15 +30,42 @@ const Home = () => {
     incompleteTask(id);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const title = e.target.title.value;
-    const description = e.target.description.value;
-    if (title && description) {
-      addTask({ title, description });
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`http://localhost:3005/task/${id}`, {
+        method: "DELETE",
+      });
+      setTask(task.filter((item) => item.id !== id));
+    } catch (e) {
+      console.error(e.message);
     }
-    console.log(addTask)
   };
+
+  const handleSubmit = async (values) => {
+    try {
+      const response = await fetch("http://localhost:3005/task/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const newTask = await response.json();
+      setTask([...task, newTask]);
+      alert("Item added");
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      Title: "",
+      Description: "",
+    },
+    onSubmit: handleSubmit,
+  });
 
   return (
     <div>
@@ -35,15 +78,27 @@ const Home = () => {
       )}
       <div className="hero">
         <div className="form">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             <div>
               <label htmlFor="title">Title</label>
-              <input className="inputtitle" id="title" name="title" />
+              <input
+                className="inputtitle"
+                id="title"
+                name="Title"
+                value={formik.values.Title}
+                onChange={formik.handleChange}
+              />
             </div>
 
             <div>
               <label htmlFor="description">Description</label>
-              <textarea className="description" id="description" name="description"></textarea>
+              <textarea
+                className="description"
+                id="description"
+                name="Description"
+                value={formik.values.Description}
+                onChange={formik.handleChange}
+              ></textarea>
             </div>
 
             <button type="submit">Add Task</button>
@@ -53,15 +108,21 @@ const Home = () => {
 
       <div className="itemt">
         <div className="taskitems">
-          {items.map((item) => (
-            <div className="itask" key={item.id}>
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
+          {task.map((task) => (
+            <div className="itask" key={task.id}>
+              <h2>{task.Title}</h2>
+              <p>{task.Description}</p>
               <div className="buttons">
-                <button onClick={() => item.isComplete ? handleIncompleteTask(item.id) : handleComplete(item.id)}>
-                  {item.isComplete ? "Incomplete" : "Complete"}
+                <button
+                  onClick={() =>
+                    task.isComplete
+                      ? handleIncompleteTask(task.id)
+                      : handleComplete(task.id)
+                  }
+                >
+                  {task.isComplete ? "Incomplete" : "Complete"}
                 </button>
-                <button>Delete</button>
+                <button onClick={() => handleDelete(task.id)}>Delete</button>
               </div>
             </div>
           ))}

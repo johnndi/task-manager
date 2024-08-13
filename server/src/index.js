@@ -1,11 +1,20 @@
 import express from "express";
 import trouter from "./routes/task.router.js";
-import { config } from "dotenv";  // You need to import config
+import { config } from "dotenv"; 
+import Cors from "cors"
 
-config();  // Call config to load environment variables
 
 const app = express();
+config();  
+
+app.use(Cors({
+    origin:"http://localhost:5173",
+    methods:["POST", "GET" ,"UPDATE" ,"DELETE"]
+    }
+))
 app.use(express.json());
+
+app.use(express.urlencoded({extended:true}))
 app.use("/task", trouter);
 
 app.listen(3005, () => {
