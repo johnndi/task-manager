@@ -1,17 +1,18 @@
 
 import './App.css'
-import {BrowserRouter, Routes, Route} from "react-router-dom"
+import Todo from './Pages/Home/Todo.jsx'
 import Home from './Pages/Home/Home.jsx'
+
 function App() {
  
 
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>}/> 
-      </Routes>
-    </BrowserRouter>
+<div>
+  <Todo/>
+  <Home/>
+
+</div>
       
     </>
   )
