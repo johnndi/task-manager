@@ -10,10 +10,15 @@ const Todo=()=>{
         setText("");
     }
     return(
-        <div>
-            <form onSubmit={handleSubmit}>
-<input type="text" className="taskInput" value={text} onChange={(e)=>setText(e.target.value)} placeholder="add a task"/>
-<button type="submit" >add</button>
+        <div >
+            <form className="from" onSubmit={handleSubmit}>
+            <div className="input">
+            <input type="text" className="taskInput" value={text} onChange={(e)=>setText(e.target.value)} placeholder="add a task"/>
+            </div>
+
+<div className="button1">
+<button className="btn" type="submit" >add</button>
+</div>
             </form>
         </div>
     )

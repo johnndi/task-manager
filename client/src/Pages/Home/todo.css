@@ -1,0 +1,39 @@
+.complete{
+    text-decoration: line-through;
+}
+.line{
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+.taskInput{
+    
+  
+    width: 20rem;
+    height: 3rem;
+    border-radius: 25px;
+    gap: 3rem;
+
+}
+.input{
+    margin: 2rem;
+}
+.from{
+   display: flex;
+   gap: 1rem;
+}
+.button1{
+    display: flex;
+    align-items: center;
+}
+
+.btn{
+    background-color: white;
+    all: unset;
+    padding:0 1rem ;
+    border: 1px solid black;
+    gap: 1rem;
+    border-radius: 10px;
+
+
+}

@@ -8,9 +8,14 @@ function App() {
 
   return (
     <>
-<div>
-  <Todo/>
-  <Home/>
+<div className="todo">
+
+<div className='items'>
+
+<Todo/>
+<Home/>
+</div>
+ 
 
 </div>
       
